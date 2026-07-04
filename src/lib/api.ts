@@ -1,4 +1,5 @@
 import { getSupabase } from "./supabase";
+import { deleteFromCloudinary } from "./cloudinary";
 import type { Listing, ListingRow, BuyRequestRow, Category } from "./database.types";
 import type { SortValue } from "./constants";
 
@@ -124,6 +125,7 @@ export async function saveListing(input: SaveListingInput): Promise<Listing> {
         "id",
         toDelete.map((d: any) => d.id),
       );
+    await deleteFromCloudinary(toDelete.map((d: any) => d.image_url));
   }
 
   const toInsert = imageUrls
@@ -140,14 +142,35 @@ export async function saveListing(input: SaveListingInput): Promise<Listing> {
 
 export async function deleteListing(id: string): Promise<void> {
   const sb = getSupabase();
+
+  const { data: images } = await sb
+    .from("listing_images")
+    .select("image_url")
+    .eq("listing_id", id);
+
   const { error } = await sb.from("listings").delete().eq("id", id);
   if (error) throw error;
+
+  if (images?.length) {
+    await deleteFromCloudinary(images.map((i: { image_url: string }) => i.image_url));
+  }
 }
 
 export async function deleteListingImage(imageId: string): Promise<void> {
   const sb = getSupabase();
+
+  const { data: image } = await sb
+    .from("listing_images")
+    .select("image_url")
+    .eq("id", imageId)
+    .maybeSingle();
+
   const { error } = await sb.from("listing_images").delete().eq("id", imageId);
   if (error) throw error;
+
+  if (image?.image_url) {
+    await deleteFromCloudinary([image.image_url]);
+  }
 }
 
 // ---------- Buy Requests ----------
@@ -178,8 +201,19 @@ export async function updateBuyRequestStatus(id: string, status: string): Promis
 
 export async function deleteBuyRequest(id: string): Promise<void> {
   const sb = getSupabase();
+
+  const { data: request } = await sb
+    .from("buy_requests")
+    .select("images")
+    .eq("id", id)
+    .maybeSingle();
+
   const { error } = await sb.from("buy_requests").delete().eq("id", id);
   if (error) throw error;
+
+  if (request?.images?.length) {
+    await deleteFromCloudinary(request.images as string[]);
+  }
 }
 
 // ---------- Stats ----------
@@ -203,3 +237,4 @@ export async function fetchStats(): Promise<Stats> {
     buyRequests: buys.count ?? 0,
   };
 }
+
