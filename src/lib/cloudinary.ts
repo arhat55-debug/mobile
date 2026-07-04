@@ -1,4 +1,5 @@
 import { getConfig } from "./config";
+import { getSupabase } from "./supabase";
 
 export interface UploadResult {
   url: string;
@@ -66,4 +67,27 @@ export function optimizedUrl(
   if (height) parts.push(`h_${height}`);
   if (width || height) parts.push(`c_${crop}`);
   return url.replace("/upload/", `/upload/${parts.join(",")}/`);
+}
+
+/**
+ * Delete one or more images from Cloudinary via the delete-cloudinary-image
+ * Edge Function (keeps the Cloudinary API secret off the client).
+ * Failures are swallowed (logged only) so a Cloudinary hiccup never blocks
+ * deleting the underlying database record.
+ */
+export async function deleteFromCloudinary(urls: string[]): Promise<void> {
+  const cleanUrls = urls.filter(Boolean);
+  if (cleanUrls.length === 0) return;
+
+  try {
+    const sb = getSupabase();
+    const { error } = await sb.functions.invoke("delete-cloudinary-image", {
+      body: { urls: cleanUrls },
+    });
+    if (error) {
+      console.error("Cloudinary delete failed:", error);
+    }
+  } catch (err) {
+    console.error("Cloudinary delete failed:", err);
+  }
 }
