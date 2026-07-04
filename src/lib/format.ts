@@ -1,9 +1,9 @@
 export function formatPrice(value?: number | null): string {
   if (value == null) return "—";
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("mn-MN", {
     style: "currency",
-    currency: "USD",
-    maximumFractionDigits: value % 1 === 0 ? 0 : 2,
+    currency: "MNT",
+    maximumFractionDigits: 0,
   }).format(value);
 }
 
