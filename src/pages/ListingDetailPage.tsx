@@ -95,7 +95,7 @@ export function ListingDetailPage() {
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Gallery */}
           <div className="space-y-3">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] border border-line bg-white/[0.02]">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] border border-line bg-black">
               {images.length ? (
                 <AnimatePresence mode="wait">
                   <motion.img
@@ -104,9 +104,9 @@ export function ListingDetailPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    src={optimizedUrl(images[active].image_url, { width: 1000 })}
+                    src={optimizedUrl(images[active].image_url, { width: 1000, crop: "fit" })}
                     alt={data.title}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
                 </AnimatePresence>
               ) : (
