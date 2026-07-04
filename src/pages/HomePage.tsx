@@ -49,10 +49,10 @@ export function HomePage() {
       {/* HERO */}
       <section className="grid-noise relative overflow-hidden border-b border-line">
         <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-30"
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-60"
           style={{ backgroundImage: "url(/images/hero.jpg)" }}
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg via-bg/80 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-bg/70 via-bg/40 to-transparent" />
         <div className="pointer-events-none absolute -right-40 -top-40 h-96 w-96 rounded-full bg-white/[0.04] blur-[120px]" />
         <div className="mx-auto max-w-7xl px-5 py-24 md:py-32">
           <motion.div
