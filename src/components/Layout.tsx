@@ -28,7 +28,7 @@ function Header() {
             <Gamepad2 className="h-5 w-5" />
           </span>
           <span className="font-display text-lg font-bold tracking-tight">
-            NEXUS<span className="text-white/40">MLBB</span>
+            Arhat<span className="text-white/40">MLBB</span>
           </span>
         </Link>
 
