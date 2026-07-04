@@ -98,13 +98,13 @@ export function SellPage() {
           </Field>
 
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Таны хүссэн үнэ (USD)" error={errors.offered_price?.message}>
+            <Field label="Таны хүссэн үнэ (₮)" error={errors.offered_price?.message}>
               <input
                 type="number"
                 step="0.01"
                 {...register("offered_price")}
                 className={inputClass}
-                placeholder="200"
+                placeholder="700000"
               />
             </Field>
             <Field label="Ранк" error={errors.rank?.message}>
@@ -160,3 +160,4 @@ export function SellPage() {
     </PageTransition>
   );
 }
+
