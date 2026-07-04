@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
   Pencil,
@@ -11,6 +11,7 @@ import {
   HandCoins,
   MessageCircle,
   ExternalLink,
+  X,
 } from "lucide-react";
 import {
   fetchStats,
@@ -40,6 +41,7 @@ export function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("listings");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Listing | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const stats = useQuery({ queryKey: ["stats"], queryFn: fetchStats });
   const listings = useQuery({
@@ -324,13 +326,19 @@ export function AdminDashboard() {
                     {r.images?.length > 0 && (
                       <div className="mt-3 flex gap-2 overflow-x-auto">
                         {r.images.map((img, i) => (
-                          <img
+                          <button
                             key={i}
-                            src={optimizedUrl(img, { width: 120, height: 120 })}
-                            alt=""
-                            loading="lazy"
-                            className="h-16 w-16 shrink-0 rounded-lg border border-line object-cover"
-                          />
+                            type="button"
+                            onClick={() => setPreviewImage(optimizedUrl(img, { width: 1400 }))}
+                            className="shrink-0"
+                          >
+                            <img
+                              src={optimizedUrl(img, { width: 120, height: 120 })}
+                              alt=""
+                              loading="lazy"
+                              className="h-16 w-16 rounded-lg border border-line object-cover transition hover:opacity-80"
+                            />
+                          </button>
                         ))}
                       </div>
                     )}
@@ -351,6 +359,34 @@ export function AdminDashboard() {
           }}
         />
       )}
+
+      <AnimatePresence>
+        {previewImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPreviewImage(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          >
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white/[0.05] text-white/80 transition hover:bg-white/[0.1]"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <motion.img
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
+              src={previewImage}
+              alt=""
+              onClick={(e) => e.stopPropagation()}
+              className="max-h-[90vh] max-w-full rounded-lg object-contain"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </PageTransition>
   );
 }
