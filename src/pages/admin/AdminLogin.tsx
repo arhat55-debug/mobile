@@ -43,7 +43,7 @@ export function AdminLogin() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Field label="Email" error={errors.email?.message}>
-            <input {...register("email")} className={inputClass} placeholder="admin@nexus.gg" />
+            <input {...register("email")} className={inputClass} placeholder="*******" />
           </Field>
           <Field label="Password" error={errors.password?.message}>
             <input
