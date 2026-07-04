@@ -139,7 +139,7 @@ function Footer() {
         </div>
       </div>
       <div className="border-t border-line py-6 text-center text-xs text-white/30">
-        © {new Date().getFullYear()} NEXUS MLBB. Moonton болон Mobile Legends-тэй хамааралгүй.
+        © {new Date().getFullYear()}     NEXUS MLBB
       </div>
     </footer>
   );
