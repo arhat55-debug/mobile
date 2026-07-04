@@ -21,13 +21,13 @@ export function ListingCard({ listing, index = 0 }: { listing: Listing; index?: 
         to={`/listing/${listing.id}`}
         className="group block overflow-hidden rounded-[20px] border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:card-shadow"
       >
-        <div className="relative aspect-[16/10] overflow-hidden bg-white/[0.02]">
+        <div className="relative aspect-[16/10] overflow-hidden bg-black">
           {cover ? (
             <img
-              src={optimizedUrl(cover, { width: 640, height: 400 })}
+              src={optimizedUrl(cover, { width: 640, height: 400, crop: "fit" })}
               alt={listing.title}
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+              className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-110"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
